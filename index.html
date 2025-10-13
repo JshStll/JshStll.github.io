@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joshua Stoll – Persönliche Startseite</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <style>
+    :root {
+      --bg: #e3f2fd;
+      --fg: #183153;
+      --accent: #1976d2;
+      --accent-light: #63a4ff;
+      --card-bg: #ffffffcc;
+      --border: #bbdefb;
+      --shadow: 0 6px 32px rgba(25,118,210,0.10);
+    }
+    html {
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 100%);
+      color: var(--fg);
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      color: #fff;
+      border-radius: 0 0 1.5rem 1.5rem;
+      box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+      margin-bottom: 2rem;
+      padding: 2.5rem 1rem 1.5rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0 0 0.7rem 0;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.3em;
+    }
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+    main {
+      max-width: 850px;
+      margin: 2.5rem auto 2rem auto;
+      padding: 0 1.2rem;
+    }
+    section {
+      margin-bottom: 2.7rem;
+    }
+    .about {
+      text-align: center;
+    }
+    .about figure {
+      margin: 2rem auto 1.2rem auto;
+      max-width: 160px;
+      box-shadow: 0 4px 18px rgba(25,118,210,0.10);
+      background: #fff;
+      border-radius: 50%;
+      padding: 0.5rem;
+    }
+    .about img {
+      width: 100%;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      background: #f5faff;
+      display: block;
+      box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+    }
+    .about figcaption {
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-top: 0.5em;
+    }
+    .about p {
+      margin-bottom: 1.1em;
+      font-size: 1.08rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.2rem 0 0 0;
+      background: var(--card-bg);
+      font-size: 1.07rem;
+      border-radius: 0.7rem;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(25,118,210,0.07);
+    }
+    th, td {
+      padding: 0.9rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      transition: background 0.2s;
+    }
+    th {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      border-bottom: 2px solid var(--accent-light);
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    tbody tr:hover {
+      background: #e3f2fd;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 721px) {
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1.2rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s;
+      position: relative;
+    }
+    .card:hover {
+      box-shadow: 0 12px 36px rgba(25,118,210,0.18);
+      transform: translateY(-3px) scale(1.025);
+    }
+    .card figure {
+      margin: 0;
+      width: 100%;
+      aspect-ratio: 3/2;
+      background: #e3f2fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-content {
+      padding: 1.2rem 1rem 1.1rem 1rem;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 0 0 0.6rem 0;
+      color: var(--accent);
+    }
+    .card-text {
+      font-size: 1.04rem;
+      color: var(--fg);
+      flex: 1 1 auto;
+      margin-bottom: 0.7em;
+    }
+    .card-link {
+      margin-top: 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      transition: text-decoration 0.2s, color 0.2s;
+    }
+    .card-link:hover {
+      text-decoration: underline;
+      color: var(--accent-light);
+    }
+
+    /* Leaflet CSS */
+    #map { min-height: 220px; min-width: 100%; z-index: 1; }
+    .leaflet-control-layers-expanded { font-size: 1rem; }
+    .leaflet-control-geocoder-form input { font-size: 1rem; }
+    /* Kompakte CRS-Control unten rechts */
+    .leaflet-crs-control {
+      background: #fff;
+      padding: 0.18em 0.5em 0.18em 0.5em;
+      border-radius: 0.5em;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+      font-size: 0.89rem;
+      margin-bottom: 0.4em;
+      margin-right: 0.4em;
+      min-width: 0;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+    .leaflet-crs-control label {
+      font-size: 0.89em;
+      margin: 0;
+    }
+    .leaflet-crs-control select {
+      font-size: 0.89em;
+      padding: 0.1em 0.3em;
+      border-radius: 0.3em;
+      border: 1px solid #bbdefb;
+      margin: 0 0.2em;
+      min-width: 4.5em;
+    }
+    .leaflet-crs-control #coords {
+      margin: 0 0 0 0.5em;
+      font-size: 0.89em;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Joshua Stoll</h1>
+    <p>Willkommen auf meiner persönlichen Startseite.</p>
+  </header>
+  <main>
+    <section class="about">
+      <figure>
+        <figcaption>Das bin ich.</figcaption>
+      </figure>
+      <p>Ich studiere Geoinformatik und Vermessung in Mainz und interessiere mich besonders für moderne Messtechnik, 3D-Daten und smarte Kartenanwendungen.</p>
+      <p>Bei Fragen, Feedback oder Interesse an Projekten freue ich mich über eine Nachricht!</p>
+    </section>
+    <section>
+      <h2>Lebenslauf</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Jahr</th>
+            <th>Station</th>
+            <th>Ort</th>
+            <th>Stichwort</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2020–2023</td><td>Ausbildung</td><td>Saarland</td><td>Ausbildung Vermessungstechniker beim Landesamt für Vermessung, Geoinformation und Landentwicklung</td></tr>
+          <tr><td>2023-heute</td><td>Student an der Hochschule Mainz</td><td>Mainz</td><td>5. Semester im Wintersemester 25/26</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section>
+      <h2>Galerie</h2>
+      <div class="gallery">
+        <a class="card" href="https://portfolio.example.com" target="_blank" rel="noopener" aria-label="Portfolio von Joshua Stoll">
+          <figure>
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Portfolio Symbolbild">
+          </figure>
+          <div class="card-content">
+            <div class="card-title">Portfolio</div>
+            <div class="card-text">Ausgewählte Arbeiten, Projekte und Referenzen im Überblick.</div>
+            <span class="card-link">Zum Portfolio</span>
+          </div>
+        </a>
+        <a class="card" href="https://fotoblog.example.com" target="_blank" rel="noopener" aria-label="Fotoblog von Joshua Stoll">
+          <figure>
+            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80" alt="Fotoblog Symbolbild">
+          </figure>
+          <div class="card-content">
+            <div class="card-title">Fotoblog</div>
+            <div class="card-text">Bilder und Eindrücke aus Projekten, Reisen und Alltag.</div>
+            <span class="card-link">Fotoblog öffnen</span>
+          </div>
+        </a>
+        <div class="card" style="padding:0;overflow:visible;">
+          <figure style="margin:0;padding:0;aspect-ratio:auto;background:none;">
+            <div id="map" style="width:100%;height:220px;border-radius:1.2rem 1.2rem 0 0;overflow:hidden;"></div>
+          </figure>
+          <div class="card-content">
+            <div class="card-title">Interaktive Karte</div>
+            <div class="card-text">Suche Orte, ändere das Koordinatensystem und entdecke die Welt direkt hier.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Leaflet JS + Geocoder + Proj4 -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/proj4@2.9.1/dist/proj4.js"></script>
+  <script src="https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var map = L.map('map').setView([50, 8], 6);
+      var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap-Mitwirkende'
+      }).addTo(map);
+      var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles © Esri'
+      });
+      var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        minZoom: 3,
+        subdomains: 'abc',
+        attribution: '© OpenTopoMap (CC-BY-SA)'
+      });
+      var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        minZoom: 0,
+        subdomains: 'abcd',
+        attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> | © OpenStreetMap contributors'
+      });
+      var baseMaps = {
+        "OSM": osm,
+        "Satellit": esri,
+        "Topo": topo,
+        "Positron": positron
+      };
+      var layersControl = L.control.layers(baseMaps).addTo(map);
+      // Geocoder
+      var geocoderControl;
+      if (typeof L.Control.Geocoder !== 'undefined') {
+        geocoderControl = L.Control.geocoder({
+          defaultMarkGeocode: true,
+          placeholder: 'Ort suchen...'
+        }).addTo(map);
+      }
+      // Koordinatenanzeige
+      var crsSelect = L.control({position: 'bottomright'}); // Position geändert
+      crsSelect.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'leaflet-crs-control leaflet-bar leaflet-control');
+        div.innerHTML = '<label for="crsSel">Koor.:</label> <select id="crsSel">'
+          + '<option value="wgs84">WGS84</option>'
+          + '<option value="utm32">UTM32</option>'
+          + '<option value="gk2">GK2</option>'
+          + '<option value="gk3">GK3</option>'
+          + '<option value="gk4">GK4</option>'
+          + '</select><span id="coords"></span>';
+        return div;
+      };
+      crsSelect.addTo(map);
+      var crsSel = document.getElementById('crsSel');
+      var coordsDiv = document.getElementById('coords');
+      function updateCoords(e) {
+        var latlng = e.latlng || map.getCenter();
+        var crs = crsSel.value;
+        if(crs === 'utm32' && typeof proj4 !== 'undefined') {
+          var utm = proj4('EPSG:4326','+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
+          coordsDiv.textContent = `UTM32: ${utm[0].toFixed(1)}, ${utm[1].toFixed(1)}`;
+        } else if(crs === 'gk2' && typeof proj4 !== 'undefined') {
+          // Gauß-Krüger 2. Streifen (EPSG:31466, 6° Ost)
+          var gk2 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+          coordsDiv.textContent = `GK2: ${gk2[0].toFixed(1)}, ${gk2[1].toFixed(1)}`;
+        } else if(crs === 'gk3' && typeof proj4 !== 'undefined') {
+          // Gauß-Krüger 3. Streifen (EPSG:31467, 9° Ost)
+          var gk3 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+          coordsDiv.textContent = `GK3: ${gk3[0].toFixed(1)}, ${gk3[1].toFixed(1)}`;
+        } else if(crs === 'gk4' && typeof proj4 !== 'undefined') {
+          // Gauß-Krüger 4. Streifen (EPSG:31468, 12° Ost)
+          var gk4 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+          coordsDiv.textContent = `GK4: ${gk4[0].toFixed(1)}, ${gk4[1].toFixed(1)}`;
+        } else {
+          coordsDiv.textContent = `WGS84: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+        }
+      }
+      map.on('mousemove', updateCoords);
+      crsSel.addEventListener('change', function(){ updateCoords({latlng: map.getCenter()}); });
+      updateCoords({latlng: map.getCenter()});
+
+      // --- Automatisches Aus-/Einblenden der Controls ---
+      function setControlsVisible(visible) {
+        // Layer-Control
+        var lc = document.querySelector('.leaflet-control-layers');
+        if (lc) lc.style.display = visible ? '' : 'none';
+        // Geocoder
+        var gc = document.querySelector('.leaflet-control-geocoder');
+        if (gc) gc.style.display = visible ? '' : 'none';
+        // CRS-Auswahl
+        var crs = document.querySelector('.leaflet-bar.leaflet-control');
+        if (crs && crs.innerHTML.includes('Koordinatensystem')) crs.style.display = visible ? '' : 'none';
+      }
+      if (geocoderControl && geocoderControl.on) {
+        geocoderControl.on('markgeocode', function() {
+          setTimeout(function() { setControlsVisible(false); }, 600);
+        });
+      }
+      map.on('click', function() { setControlsVisible(true); });
+      map.on('mousemove', function() { setControlsVisible(true); });
+    });
+  </script>
+</body>
+</html>
