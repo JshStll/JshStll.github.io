@@ -6,7 +6,16 @@
   <title>Joshua Stoll – Persönliche Startseite</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
   <style>
+    /* Marker-Popup Verbesserungen */
+    .leaflet-popup-content {
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .popup-marker-table tr:hover {
+      background: #e3f2fd !important;
+    }
     :root {
       --bg: #e3f2fd;
       --fg: #183153;
@@ -63,25 +72,43 @@
       text-align: center;
     }
     .about figure {
-      margin: 2rem auto 1.2rem auto;
-      max-width: 160px;
-      box-shadow: 0 4px 18px rgba(25,118,210,0.10);
-      background: #fff;
-      border-radius: 50%;
-      padding: 0.5rem;
+  margin: 2.5rem auto 1.5rem auto;
+  max-width: 280px;
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 0.7rem 0.7rem 1.7rem 0.7rem;
+  box-shadow: 0 8px 32px rgba(25,118,210,0.16);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  position: relative;
     }
     .about img {
-      width: 100%;
-      border-radius: 50%;
-      border: 3px solid var(--border);
-      background: #f5faff;
+      width: 220px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 0.8rem;
+      border: 6px solid #fff;
+      background: #e3f2fd;
       display: block;
-      box-shadow: 0 2px 12px rgba(25,118,210,0.08);
+      box-shadow: 0 4px 18px rgba(25,118,210,0.13);
+      transition: box-shadow 0.3s, transform 0.3s;
+      will-change: transform;
+      position: relative;
+      z-index: 1;
     }
-    .about figcaption {
-      font-size: 1.05rem;
-      color: var(--accent);
-      margin-top: 0.5em;
+    .about figure .about-name {
+      margin-top: 1.1rem;
+      font-size: 1.18rem;
+      font-weight: 600;
+      color: #1976d2;
+      letter-spacing: 0.02em;
+      text-align: center;
+      opacity: 0.92;
+      user-select: none;
+    }
     }
     .about p {
       margin-bottom: 1.1em;
@@ -117,26 +144,40 @@
       background: #e3f2fd;
     }
     .gallery {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
+    .map-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
     }
     @media (min-width: 721px) {
       .gallery {
-        grid-template-columns: repeat(3, 1fr);
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: flex-start;
       }
     }
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 1.2rem;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      box-shadow: var(--shadow);
-      transition: box-shadow 0.2s, transform 0.2s;
-      position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 1.2rem;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
     }
     .card:hover {
       box-shadow: 0 12px 36px rgba(25,118,210,0.18);
@@ -191,6 +232,14 @@
 
     /* Leaflet CSS */
     #map { min-height: 220px; min-width: 100%; z-index: 1; }
+    #map {
+  width: 600px;
+  height: 400px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 1.2rem;
+  z-index: 1;
+    }
     .leaflet-control-layers-expanded { font-size: 1rem; }
     .leaflet-control-geocoder-form input { font-size: 1rem; }
     /* Kompakte CRS-Control unten rechts */
@@ -225,6 +274,233 @@
       font-size: 0.89em;
       display: inline-block;
     }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: var(--card-bg);
+      color: var(--accent);
+      border: 2px solid var(--accent);
+      border-radius: 2rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(25,118,210,0.10);
+      transition: background 0.2s, color 0.2s, border 0.2s;
+      z-index: 100;
+    }
+    .theme-toggle:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent-light);
+    }
+    body.night {
+      --bg: #181a20;
+      --fg: #e3f2fd;
+      --accent: #90caf9;
+      --accent-light: #1976d2;
+      --card-bg: #232b3e;
+      --border: #394867;
+      --shadow: 0 6px 32px rgba(25,118,210,0.18);
+      background: linear-gradient(120deg, #181a20 0%, #232b3e 100%) !important;
+      color: var(--fg) !important;
+    }
+    header, .card, .map-wrapper, .leaflet-crs-control, .tab-btn {
+      background: var(--card-bg) !important;
+      color: var(--fg) !important;
+      border-color: var(--border) !important;
+    }
+    .tab-btn.active, .tab-btn:focus {
+      background: linear-gradient(90deg, var(--accent-light) 0%, var(--accent) 100%) !important;
+      color: #fff !important;
+      border-color: var(--accent-light) !important;
+    }
+    th {
+      background: var(--accent) !important;
+      color: #fff !important;
+      border-bottom: 2px solid var(--accent-light) !important;
+    }
+    tbody tr:hover {
+      background: #232b3e !important;
+    }
+    .leaflet-control-layers-expanded, .leaflet-control-geocoder-form input {
+      background: var(--card-bg) !important;
+      color: var(--fg) !important;
+    }
+    #map {
+      background: #232b3e !important;
+    }
+    /* Tabs CSS */
+    .modern-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .tab-btn {
+      background: #fff;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 1.18rem;
+      font-weight: 700;
+      border-radius: 1.8rem;
+      padding: 0.9rem 2.5rem;
+      box-shadow: 0 2px 12px rgba(25,118,210,0.10);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      cursor: pointer;
+      transition: background 0.22s, color 0.18s, border 0.18s, box-shadow 0.18s, transform 0.18s;
+      outline: none;
+    }
+    .tab-btn.active, .tab-btn:focus {
+      background: linear-gradient(90deg, var(--accent-light) 0%, var(--accent) 100%);
+      color: #fff;
+      border-color: var(--accent-light);
+      box-shadow: 0 8px 32px rgba(25,118,210,0.18);
+      transform: scale(1.04);
+    }
+    .tab-btn:focus {
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+    .tab-content {
+      animation: fadeTab 0.4s;
+    }
+    @keyframes fadeTab {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .map-wrapper {
+      width: 90vw;
+      max-width: 1100px;
+  margin: 0 auto;
+      border-radius: 1.2rem 1.2rem 0 0;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      position: relative;
+      padding: 0;
+    }
+    #map {
+      width: 90vw !important;
+      max-width: 1100px !important;
+      height: 400px !important;
+      min-height: 400px !important;
+      display: block;
+      position: relative;
+      z-index: 2;
+      border-radius: 1.2rem 1.2rem 0 0;
+      margin: 0;
+      box-sizing: border-box;
+      background: #232b3e;
+    }
+    @media (max-width: 900px) {
+      .map-wrapper, #map {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-left: 0;
+        height: 220px !important;
+        min-height: 220px !important;
+      }
+    }
+    .news-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1.2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      align-items: stretch;
+      min-height: 140px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .news-card:hover {
+      box-shadow: 0 12px 36px rgba(25,118,210,0.18);
+      transform: translateY(-3px) scale(1.025);
+    }
+    .news-img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 1.2rem 0 0 1.2rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .news-content {
+      padding: 1.2rem 1rem 1.1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+    .news-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.3em;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .news-title:hover {
+      color: var(--accent-light);
+    }
+    .news-date {
+      font-size: 0.98rem;
+      color: var(--fg);
+      opacity: 0.7;
+      margin-bottom: 0.5em;
+    }
+    .news-text {
+      font-size: 1.04rem;
+      color: var(--fg);
+    }
+
+    /* Kontaktbereich unten rechts */
+    .contact-icons {
+      position: fixed;
+      right: 2.2rem;
+      bottom: 2.2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      align-items: flex-end;
+    }
+    .contact-icons a {
+      background: var(--card-bg);
+      border-radius: 50%;
+      box-shadow: 0 2px 12px rgba(25,118,210,0.10);
+      padding: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, box-shadow 0.2s;
+      border: 1.5px solid var(--border);
+    }
+    .contact-icons a:hover {
+      background: var(--accent);
+      box-shadow: 0 6px 24px rgba(25,118,210,0.18);
+      border-color: var(--accent-light);
+    }
+    .contact-icons svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--accent);
+      transition: fill 0.2s;
+    }
+    .contact-icons a:hover svg {
+      fill: #fff;
+    }
   </style>
 </head>
 <body>
@@ -232,63 +508,42 @@
     <h1>Joshua Stoll</h1>
     <p>Willkommen auf meiner persönlichen Startseite.</p>
   </header>
-  <main>
-    <section class="about">
-      <figure>
-        <figcaption>Das bin ich.</figcaption>
-      </figure>
-      <p>Ich studiere Geoinformatik und Vermessung in Mainz und interessiere mich besonders für moderne Messtechnik, 3D-Daten und smarte Kartenanwendungen.</p>
-      <p>Bei Fragen, Feedback oder Interesse an Projekten freue ich mich über eine Nachricht!</p>
-    </section>
+  <!-- Entfernt: Falscher Hyperlink, Kontakt-Icons sind unten rechts -->
     <section>
-      <h2>Lebenslauf</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Jahr</th>
-            <th>Station</th>
-            <th>Ort</th>
-            <th>Stichwort</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>2020–2023</td><td>Ausbildung</td><td>Saarland</td><td>Ausbildung Vermessungstechniker beim Landesamt für Vermessung, Geoinformation und Landentwicklung</td></tr>
-          <tr><td>2023-heute</td><td>Student an der Hochschule Mainz</td><td>Mainz</td><td>5. Semester im Wintersemester 25/26</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section>
-      <h2>Galerie</h2>
-      <div class="gallery">
-        <a class="card" href="https://portfolio.example.com" target="_blank" rel="noopener" aria-label="Portfolio von Joshua Stoll">
-          <figure>
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Portfolio Symbolbild">
+      <!-- Moderne Tabs Navigation -->
+      <div class="modern-tabs">
+        <button class="tab-btn active" id="show-about" aria-controls="about-section" aria-selected="true">About</button>
+        <button class="tab-btn" id="show-news" aria-controls="news-section" aria-selected="false">News</button>
+        <button class="tab-btn" id="show-projects" aria-controls="projects-section" aria-selected="false">Interaktive Karte</button>
+      </div>
+      <!-- Tab Content Bereiche (nur einer sichtbar) -->
+      <div id="about-section" class="tab-content" style="display:block;">
+        <section class="about">
+          <figure style="margin:2rem auto 1.2rem auto;max-width:320px;display:flex;align-items:center;justify-content:center;position:relative;">
+            <div style="position:relative;width:260px;height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:1.2rem;box-shadow:0 8px 32px rgba(25,118,210,0.18);background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+              <img src="assets/IMG_3928.jpeg" alt="Profilfoto" style="width:220px;height:220px;object-fit:cover;border-radius:0.8rem;border:6px solid #fff;background:#e3f2fd;box-shadow:0 4px 18px rgba(25,118,210,0.13);transition:box-shadow 0.3s,transform 0.3s;will-change:transform;position:relative;z-index:1;">
+              <div class="about-name">Joshua Stoll</div>
+            </div>
           </figure>
-          <div class="card-content">
-            <div class="card-title">Portfolio</div>
-            <div class="card-text">Ausgewählte Arbeiten, Projekte und Referenzen im Überblick.</div>
-            <span class="card-link">Zum Portfolio</span>
+          <p>Ich studiere Geoinformatik und Vermessung in Mainz und interessiere mich besonders für moderne Messtechnik, 3D-Daten und smarte Kartenanwendungen.</p>
+          <p>Bei Fragen, Feedback oder Interesse an Projekten freue ich mich über eine Nachricht!</p>
+        </section>
+      </div>
+      <div id="news-section" class="tab-content" style="display:none;">
+        <section>
+          <h2>News</h2>
+          <div id="news-list" class="news-list"></div>
+        </section>
+      </div>
+      <div id="projects-section" class="tab-content" style="display:none;">
+        <section>
+          <div class="map-wrapper">
+            <div id="map"></div>
           </div>
-        </a>
-        <a class="card" href="https://fotoblog.example.com" target="_blank" rel="noopener" aria-label="Fotoblog von Joshua Stoll">
-          <figure>
-            <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80" alt="Fotoblog Symbolbild">
-          </figure>
-          <div class="card-content">
-            <div class="card-title">Fotoblog</div>
-            <div class="card-text">Bilder und Eindrücke aus Projekten, Reisen und Alltag.</div>
-            <span class="card-link">Fotoblog öffnen</span>
+          <div style="text-align:center;margin-top:1.2rem;">
+            Die Karte bietet einen praxisnahen Einblick in die Welt der Geoinformatik und Vermessung. Mit modernen Tools lassen sich Entfernungen und Flächen messen, Koordinaten in verschiedenen Bezugssystemen anzeigen und Standorte gezielt analysieren. So werden GIS-Funktionen und geodätische Methoden anschaulich und interaktiv erlebbar – ideal für Studium, Projektarbeit und die digitale Kartierung.
           </div>
-        </a>
-        <div class="card" style="padding:0;overflow:visible;">
-          <figure style="margin:0;padding:0;aspect-ratio:auto;background:none;">
-            <div id="map" style="width:100%;height:220px;border-radius:1.2rem 1.2rem 0 0;overflow:hidden;"></div>
-          </figure>
-          <div class="card-content">
-            <div class="card-title">Interaktive Karte</div>
-            <div class="card-text">Suche Orte, ändere das Koordinatensystem und entdecke die Welt direkt hier.</div>
-          </div>
-        </div>
+        </section>
       </div>
     </section>
   </main>
@@ -298,84 +553,198 @@
   <script src="https://unpkg.com/proj4@2.9.1/dist/proj4.js"></script>
   <script src="https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
   <script>
     window.addEventListener('DOMContentLoaded', function() {
-      var map = L.map('map').setView([50, 8], 6);
-      var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap-Mitwirkende'
-      }).addTo(map);
-      var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles © Esri'
-      });
-      var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-        maxZoom: 17,
-        minZoom: 3,
-        subdomains: 'abc',
-        attribution: '© OpenTopoMap (CC-BY-SA)'
-      });
-      var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        minZoom: 0,
-        subdomains: 'abcd',
-        attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> | © OpenStreetMap contributors'
-      });
-      var baseMaps = {
-        "OSM": osm,
-        "Satellit": esri,
-        "Topo": topo,
-        "Positron": positron
-      };
-      var layersControl = L.control.layers(baseMaps).addTo(map);
-      // Geocoder
-      var geocoderControl;
-      if (typeof L.Control.Geocoder !== 'undefined') {
-        geocoderControl = L.Control.geocoder({
-          defaultMarkGeocode: true,
-          placeholder: 'Ort suchen...'
-        }).addTo(map);
-      }
-      // Koordinatenanzeige
-      var crsSelect = L.control({position: 'bottomright'}); // Position geändert
-      crsSelect.onAdd = function(map) {
-        var div = L.DomUtil.create('div', 'leaflet-crs-control leaflet-bar leaflet-control');
-        div.innerHTML = '<label for="crsSel">Koor.:</label> <select id="crsSel">'
-          + '<option value="wgs84">WGS84</option>'
-          + '<option value="utm32">UTM32</option>'
-          + '<option value="gk2">GK2</option>'
-          + '<option value="gk3">GK3</option>'
-          + '<option value="gk4">GK4</option>'
-          + '</select><span id="coords"></span>';
-        return div;
-      };
-      crsSelect.addTo(map);
-      var crsSel = document.getElementById('crsSel');
-      var coordsDiv = document.getElementById('coords');
-      function updateCoords(e) {
-        var latlng = e.latlng || map.getCenter();
-        var crs = crsSel.value;
-        if(crs === 'utm32' && typeof proj4 !== 'undefined') {
-          var utm = proj4('EPSG:4326','+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
-          coordsDiv.textContent = `UTM32: ${utm[0].toFixed(1)}, ${utm[1].toFixed(1)}`;
-        } else if(crs === 'gk2' && typeof proj4 !== 'undefined') {
-          // Gauß-Krüger 2. Streifen (EPSG:31466, 6° Ost)
-          var gk2 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
-          coordsDiv.textContent = `GK2: ${gk2[0].toFixed(1)}, ${gk2[1].toFixed(1)}`;
-        } else if(crs === 'gk3' && typeof proj4 !== 'undefined') {
-          // Gauß-Krüger 3. Streifen (EPSG:31467, 9° Ost)
-          var gk3 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
-          coordsDiv.textContent = `GK3: ${gk3[0].toFixed(1)}, ${gk3[1].toFixed(1)}`;
-        } else if(crs === 'gk4' && typeof proj4 !== 'undefined') {
-          // Gauß-Krüger 4. Streifen (EPSG:31468, 12° Ost)
-          var gk4 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
-          coordsDiv.textContent = `GK4: ${gk4[0].toFixed(1)}, ${gk4[1].toFixed(1)}`;
-        } else {
-          coordsDiv.textContent = `WGS84: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+      // Map-Initialisierung direkt beim Laden der Seite
+      const mapDiv = document.getElementById('map');
+      if (mapDiv) {
+      // Initialize map only when the tab is activated
+      const aboutBtn = document.getElementById('show-about');
+      const newsBtn = document.getElementById('show-news');
+      const projectsBtn = document.getElementById('show-projects');
+      const projectsSection = document.getElementById('projects-section');
+      projectsBtn.addEventListener('click', () => {
+        // Remove any previous map instance and container
+        if (window.leafletMap) {
+          window.leafletMap.remove();
+          window.leafletMap = null;
         }
+        const mapWrapper = document.querySelector('.map-wrapper');
+        if (mapWrapper) {
+          let oldMapDiv = document.getElementById('map');
+          if (oldMapDiv) mapWrapper.removeChild(oldMapDiv);
+          let newMapDiv = document.createElement('div');
+          newMapDiv.id = 'map';
+          mapWrapper.appendChild(newMapDiv);
+          window.leafletMap = L.map('map', {
+            dragging: true,
+            doubleClickZoom: false,
+            boxZoom: false,
+            keyboard: true,
+            scrollWheelZoom: true,
+            touchZoom: true,
+          }).setView([50, 8], 6);
+          var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap-Mitwirkende'
+          }).addTo(window.leafletMap);
+          var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri'
+          });
+          var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            maxZoom: 17,
+            minZoom: 3,
+            subdomains: 'abc',
+            attribution: '© OpenTopoMap (CC-BY-SA)'
+          });
+          var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            minZoom: 0,
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> | © OpenStreetMap contributors'
+          });
+          var baseMaps = {
+            "OSM": osm,
+            "Satellit": esri,
+            "Topo": topo,
+            "Positron": positron
+          };
+          L.control.layers(baseMaps).addTo(window.leafletMap);
+          if (typeof L.Control.Geocoder !== 'undefined') {
+            L.Control.geocoder({
+              defaultMarkGeocode: true,
+              placeholder: 'Ort suchen...'
+            }).addTo(window.leafletMap);
+          }
+          setTimeout(function() {
+            window.leafletMap.invalidateSize();
+          }, 100);
+        }
+      });
+                layer.on('click', function() {
+                  if (window.selectedMarkers.length < 2) {
+                    window.selectedMarkers.push(layer);
+                    layer.setIcon(new L.Icon.Default({className:'selected-marker'}));
+                  }
+                  if (window.selectedMarkers.length === 2) {
+                    const latlng1 = window.selectedMarkers[0].getLatLng();
+                    const latlng2 = window.selectedMarkers[1].getLatLng();
+                    const dist = leafletMap.distance(latlng1, latlng2);
+                    const line = L.polyline([latlng1, latlng2], {color:'#ff9800',weight:3,dashArray:'6,4'}).addTo(drawnItems);
+                    line.bindPopup('Strecke zwischen gewählten Markern: ' + dist.toFixed(1) + ' m').openPopup();
+                    // Reset Auswahl
+                    window.selectedMarkers.forEach(m => m.setIcon(new L.Icon.Default()));
+                    window.selectedMarkers = [];
+                  }
+                });
+                // Marker-Popup wie gehabt
+                const latlng = layer.getLatLng();
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString();
+                let placename = '';
+                try {
+                  const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`);
+                  const data = await res.json();
+                  placename = data.display_name || '';
+                } catch {}
+                let utmStr = '', gkStr = '';
+                try {
+                  const utm = proj4('EPSG:4326', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
+                  utmStr = `UTM32: Rechtswert: ${utm[0].toFixed(1)} m, Hochwert: ${utm[1].toFixed(1)} m`;
+                  let gkZone = '', gkProj = '';
+                  if (latlng.lng >= 6 && latlng.lng < 9) {
+                    gkZone = 'GK2';
+                    gkProj = '+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                  } else if (latlng.lng >= 9 && latlng.lng < 12) {
+                    gkZone = 'GK3';
+                    gkProj = '+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                  } else if (latlng.lng >= 12 && latlng.lng < 15) {
+                    gkZone = 'GK4';
+                    gkProj = '+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                  }
+                  if (gkProj) {
+                    const gk = proj4('EPSG:4326', gkProj, [latlng.lng, latlng.lat]);
+                    gkStr = `${gkZone}: Rechtswert: ${gk[0].toFixed(1)} m, Hochwert: ${gk[1].toFixed(1)} m`;
+                  }
+                } catch {}
+                layer.bindPopup(
+                  `<div class='popup-marker-content' style='font-family:system-ui,sans-serif;min-width:220px;'>
+                    <div style='font-weight:600;font-size:1.08em;margin-bottom:0.3em;color:#1976d2;'>Geodätischer Marker</div>
+                    <table class='popup-marker-table' style='width:100%;border-collapse:collapse;'>
+                      <tr><td style='font-weight:500;'>Uhrzeit:</td><td>${timeStr}</td></tr>
+                      <tr><td style='font-weight:500;'>Ort:</td><td>${placename}</td></tr>
+                      <tr><td style='font-weight:500;'>Breite:</td><td>${latlng.lat.toFixed(5)}</td></tr>
+                      <tr><td style='font-weight:500;'>Länge:</td><td>${latlng.lng.toFixed(5)}</td></tr>
+                      <tr><td style='font-weight:500;'>UTM32:</td><td>${utmStr.replace('UTM32: ','')}</td></tr>
+                      <tr><td style='font-weight:500;'>GK:</td><td>${gkStr}</td></tr>
+                    </table>
+                  </div>`
+                ).openPopup();
+                // Marker löschen per Rechtsklick
+                layer.on('contextmenu', function() {
+                  drawnItems.removeLayer(layer);
+                  window.markerLayers = window.markerLayers.filter(m => m !== layer);
+                  window.selectedMarkers = window.selectedMarkers.filter(m => m !== layer);
+                });
+              }
+              if (type === 'polyline') {
+                const latlngs = layer.getLatLngs();
+                let dist = 0;
+                for (let i = 1; i < latlngs.length; i++) {
+                  dist += leafletMap.distance(latlngs[i-1], latlngs[i]);
+                }
+                layer.bindPopup('Entfernung: ' + dist.toFixed(1) + ' m').openPopup();
+              } else if (type === 'polygon') {
+                const area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
+                layer.bindPopup('Fläche: ' + (area/10000).toFixed(2) + ' ha').openPopup();
+              }
+              drawnItems.addLayer(layer);
+            });
+          }
+        }
+        // CRS und Koordinatenanzeige
+        var crsSelect = L.control({position: 'bottomright'});
+        crsSelect.onAdd = function(map) {
+          var div = L.DomUtil.create('div', 'leaflet-crs-control leaflet-bar leaflet-control');
+          div.innerHTML = '<label for="crsSel">Koor.:</label> <select id="crsSel">'
+            + '<option value="wgs84">WGS84</option>'
+            + '<option value="utm32">UTM32</option>'
+            + '<option value="gk2">GK2</option>'
+            + '<option value="gk3">GK3</option>'
+            + '<option value="gk4">GK4</option>'
+            + '</select><span id="coords"></span>';
+          return div;
+        };
+        crsSelect.addTo(leafletMap);
+        var crsSel = document.getElementById('crsSel');
+        var coordsDiv = document.getElementById('coords');
+        function updateCoords(e) {
+          var latlng = e.latlng || leafletMap.getCenter();
+          var crs = crsSel.value;
+          if(crs === 'utm32' && typeof proj4 !== 'undefined') {
+            var utm = proj4('EPSG:4326','+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `UTM32: ${utm[0].toFixed(1)}, ${utm[1].toFixed(1)}`;
+          } else if(crs === 'gk2' && typeof proj4 !== 'undefined') {
+            var gk2 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK2: ${gk2[0].toFixed(1)}, ${gk2[1].toFixed(1)}`;
+          } else if(crs === 'gk3' && typeof proj4 !== 'undefined') {
+            var gk3 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK3: ${gk3[0].toFixed(1)}, ${gk3[1].toFixed(1)}`;
+          } else if(crs === 'gk4' && typeof proj4 !== 'undefined') {
+            var gk4 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK4: ${gk4[0].toFixed(1)}, ${gk4[1].toFixed(1)}`;
+          } else {
+            coordsDiv.textContent = `WGS84: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+          }
+        }
+        leafletMap.on('mousemove', updateCoords);
+        crsSel.addEventListener('change', function(){ updateCoords({latlng: leafletMap.getCenter()}); });
+        updateCoords({latlng: leafletMap.getCenter()});
       }
-      map.on('mousemove', updateCoords);
-      crsSel.addEventListener('change', function(){ updateCoords({latlng: map.getCenter()}); });
-      updateCoords({latlng: map.getCenter()});
+        } catch (e) {
+          console.error('Fehler bei der Map-Initialisierung:', e);
+        }
 
       // --- Automatisches Aus-/Einblenden der Controls ---
       function setControlsVisible(visible) {
@@ -398,5 +767,306 @@
       map.on('mousemove', function() { setControlsVisible(true); });
     });
   </script>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Theme wechseln">🌙</button>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    function setTheme(night) {
+      document.body.classList.toggle('night', night);
+      themeToggle.textContent = night ? '☀️' : '🌙';
+      localStorage.setItem('theme', night ? 'night' : 'light');
+    }
+    themeToggle.addEventListener('click', () => {
+      setTheme(!document.body.classList.contains('night'));
+    });
+    // Initial Theme
+    setTheme(localStorage.getItem('theme') === 'night');
+
+    const aboutBtn = document.getElementById('show-about');
+    const newsBtn = document.getElementById('show-news');
+    const projectsBtn = document.getElementById('show-projects');
+    const aboutSection = document.getElementById('about-section');
+    const newsSection = document.getElementById('news-section');
+    const projectsSection = document.getElementById('projects-section');
+    function showTab(tab) {
+      if(tab === 'projects') {
+        setTimeout(function() {
+          if (!window.leafletMap) {
+            const mapDiv = document.getElementById('map');
+            if (mapDiv) {
+              mapDiv.innerHTML = "";
+              window.leafletMap = L.map('map', {
+                dragging: true,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: true,
+                scrollWheelZoom: true,
+                touchZoom: true,
+              }).setView([50, 8], 6);
+              var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap-Mitwirkende'
+              }).addTo(window.leafletMap);
+              var esri = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri'
+              });
+              var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                maxZoom: 17,
+                minZoom: 3,
+                subdomains: 'abc',
+                attribution: '© OpenTopoMap (CC-BY-SA)'
+              });
+              var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                minZoom: 0,
+                subdomains: 'abcd',
+                attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a> | © OpenStreetMap contributors'
+              });
+              var baseMaps = {
+                "OSM": osm,
+                "Satellit": esri,
+                "Topo": topo,
+                "Positron": positron
+              };
+              L.control.layers(baseMaps).addTo(window.leafletMap);
+              if (typeof L.Control.Geocoder !== 'undefined') {
+                L.Control.geocoder({
+                  defaultMarkGeocode: true,
+                  placeholder: 'Ort suchen...'
+                }).addTo(window.leafletMap);
+              }
+              // --- Entfernungsmessung mit Leaflet.Draw ---
+              if (typeof L.Draw !== 'undefined') {
+                // Always create a new FeatureGroup and Draw control for each map instance
+                if (window.leafletMap._drawControl) {
+                  window.leafletMap.removeControl(window.leafletMap._drawControl);
+                }
+                window.drawnItems = new L.FeatureGroup();
+                window.leafletMap.addLayer(window.drawnItems);
+                window.markerLayers = window.markerLayers || [];
+                window.selectedMarkers = window.selectedMarkers || [];
+                window.leafletMap._drawControl = new L.Control.Draw({
+                  position: 'topleft',
+                  draw: {
+                    polyline: {
+                      shapeOptions: {
+                        color: '#1976d2',
+                        weight: 4
+                      },
+                      metric: true
+                    },
+                    polygon: {
+                      allowIntersection: false,
+                      showArea: true,
+                      shapeOptions: {
+                        color: '#388e3c',
+                        weight: 3
+                      },
+                      metric: true
+                    },
+                    marker: {
+                      icon: new L.Icon.Default()
+                    },
+                    circle: false,
+                    rectangle: false,
+                  },
+                  edit: {
+                    featureGroup: window.drawnItems
+                  }
+                });
+                window.leafletMap.addControl(window.leafletMap._drawControl);
+                 // Marker- und Koordinaten-Logik
+                 window.leafletMap.on('draw:created', function(e) {
+                   const type = e.layerType, layer = e.layer;
+                   if (type === 'marker') {
+                     (async function() {
+                       const latlng = layer.getLatLng();
+                       window.drawnItems.addLayer(layer);
+                       const now = new Date();
+                       const timeStr = now.toLocaleTimeString();
+                       let placename = '', country = '';
+                       try {
+                         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`);
+                         const data = await res.json();
+                         placename = data.display_name || '';
+                         country = (data.address && data.address.country) ? data.address.country : '';
+                       } catch {}
+                       // Einzigartiger Name: Ortsname + Land
+                       let uniqueName = placename ? placename.split(',')[0] : 'Marker';
+                       if (country) uniqueName += ' (' + country + ')';
+                       let utmStr = '', gkStr = '';
+                       try {
+                         const utm = proj4('EPSG:4326', '+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
+                         utmStr = `UTM32: Rechtswert: ${utm[0].toFixed(1)} m, Hochwert: ${utm[1].toFixed(1)} m`;
+                         let gkZone = '', gkProj = '';
+                         if (latlng.lng >= 6 && latlng.lng < 9) {
+                           gkZone = 'GK2';
+                           gkProj = '+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                         } else if (latlng.lng >= 9 && latlng.lng < 12) {
+                           gkZone = 'GK3';
+                           gkProj = '+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                         } else if (latlng.lng >= 12 && latlng.lng < 15) {
+                           gkZone = 'GK4';
+                           gkProj = '+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs';
+                         }
+                         if (gkProj) {
+                           const gk = proj4('EPSG:4326', gkProj, [latlng.lng, latlng.lat]);
+                           gkStr = `${gkZone}: Rechtswert: ${gk[0].toFixed(1)} m, Hochwert: ${gk[1].toFixed(1)} m`;
+                         }
+                       } catch {}
+                       layer.bindPopup(
+                         `<div class='popup-marker-content' style='font-family:system-ui,sans-serif;min-width:220px;'>
+                           <div style='font-weight:600;font-size:1.08em;margin-bottom:0.3em;color:#1976d2;'>${uniqueName}</div>
+                           <table class='popup-marker-table' style='width:100%;border-collapse:collapse;'>
+                             <tr><td style='font-weight:500;'>Uhrzeit:</td><td>${timeStr}</td></tr>
+                             <tr><td style='font-weight:500;'>Ort:</td><td>${placename}</td></tr>
+                             <tr><td style='font-weight:500;'>Breite:</td><td>${latlng.lat.toFixed(5)}</td></tr>
+                             <tr><td style='font-weight:500;'>Länge:</td><td>${latlng.lng.toFixed(5)}</td></tr>
+                             <tr><td style='font-weight:500;'>UTM32:</td><td>${utmStr.replace('UTM32: ','')}</td></tr>
+                             <tr><td style='font-weight:500;'>GK:</td><td>${gkStr}</td></tr>
+                           </table>
+                         </div>`
+                       );
+                       layer.openPopup();
+                       layer.on('click', function() { layer.openPopup(); });
+                       layer.on('contextmenu', function() {
+                         window.drawnItems.removeLayer(layer);
+                       });
+                     })();
+                   }
+                   if (type === 'polyline') {
+                     const latlngs = layer.getLatLngs();
+                     let dist = 0;
+                     for (let i = 1; i < latlngs.length; i++) {
+                       dist += window.leafletMap.distance(latlngs[i-1], latlngs[i]);
+                     }
+                     layer.bindPopup('Entfernung: ' + dist.toFixed(1) + ' m').openPopup();
+                   } else if (type === 'polygon') {
+                     const latlngs = layer.getLatLngs();
+                     if (latlngs && latlngs[0]) {
+                       const area = L.GeometryUtil.geodesicArea(latlngs[0]);
+                       layer.bindPopup('Fläche: ' + (area/10000).toFixed(2) + ' ha').openPopup();
+                     }
+                   }
+                   drawnItems.addLayer(layer);
+                 });
+        // CRS und Koordinatenanzeige
+        var crsSelect = L.control({position: 'bottomright'});
+        crsSelect.onAdd = function(map) {
+          var div = L.DomUtil.create('div', 'leaflet-crs-control leaflet-bar leaflet-control');
+          div.innerHTML = '<label for="crsSel">Koor.:</label> <select id="crsSel">'
+            + '<option value="wgs84">WGS84</option>'
+            + '<option value="utm32">UTM32</option>'
+            + '<option value="gk2">GK2</option>'
+            + '<option value="gk3">GK3</option>'
+            + '<option value="gk4">GK4</option>'
+            + '</select><span id="coords"></span>';
+          return div;
+        };
+        crsSelect.addTo(window.leafletMap);
+        var crsSel = document.getElementById('crsSel');
+        var coordsDiv = document.getElementById('coords');
+        function updateCoords(e) {
+          var latlng = e.latlng || window.leafletMap.getCenter();
+          var crs = crsSel.value;
+          if(crs === 'utm32' && typeof proj4 !== 'undefined') {
+            var utm = proj4('EPSG:4326','+proj=utm +zone=32 +datum=WGS84 +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `UTM32: ${utm[0].toFixed(1)}, ${utm[1].toFixed(1)}`;
+          } else if(crs === 'gk2' && typeof proj4 !== 'undefined') {
+            var gk2 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=6 +k=1 +x_0=2500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK2: ${gk2[0].toFixed(1)}, ${gk2[1].toFixed(1)}`;
+          } else if(crs === 'gk3' && typeof proj4 !== 'undefined') {
+            var gk3 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK3: ${gk3[0].toFixed(1)}, ${gk3[1].toFixed(1)}`;
+          } else if(crs === 'gk4' && typeof proj4 !== 'undefined') {
+            var gk4 = proj4('EPSG:4326','+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +datum=potsdam +units=m +no_defs', [latlng.lng, latlng.lat]);
+            coordsDiv.textContent = `GK4: ${gk4[0].toFixed(1)}, ${gk4[1].toFixed(1)}`;
+          } else {
+            coordsDiv.textContent = `WGS84: ${latlng.lat.toFixed(5)}, ${latlng.lng.toFixed(5)}`;
+          }
+        }
+        window.leafletMap.on('mousemove', updateCoords);
+        crsSel.addEventListener('change', function(){ updateCoords({latlng: window.leafletMap.getCenter()}); });
+        updateCoords({latlng: window.leafletMap.getCenter()});
+              }
+            }
+          } else {
+            window.leafletMap.invalidateSize();
+          }
+        }, 300);
+      }
+      aboutBtn.classList.remove('active');
+      newsBtn.classList.remove('active');
+      projectsBtn.classList.remove('active');
+      aboutSection.style.display = 'none';
+      newsSection.style.display = 'none';
+      projectsSection.style.display = 'none';
+      if(tab === 'about') {
+        aboutBtn.classList.add('active');
+        aboutBtn.setAttribute('aria-selected', 'true');
+        aboutSection.style.display = 'block';
+      } else if(tab === 'news') {
+        newsBtn.classList.add('active');
+        newsBtn.setAttribute('aria-selected', 'true');
+        newsSection.style.display = 'block';
+        loadNews();
+      } else if(tab === 'projects') {
+        projectsBtn.classList.add('active');
+        projectsBtn.setAttribute('aria-selected', 'true');
+        projectsSection.style.display = 'block';
+        setTimeout(function() {
+          if (window.leafletMap) {
+            window.leafletMap.invalidateSize();
+          }
+        }, 300);
+      }
+    }
+    aboutBtn.addEventListener('click', () => showTab('about'));
+    newsBtn.addEventListener('click', () => showTab('news'));
+    projectsBtn.addEventListener('click', () => showTab('projects'));
+
+    // Nach Tab-Wechsel Map-Größe anpassen
+    // Entfernt: mapBtn ist nicht definiert und wird nicht benötigt
+
+    // Dynamische News laden
+    async function loadNews() {
+      try {
+        const response = await fetch('assets/news.json');
+        if (!response.ok) throw new Error('Datei nicht gefunden');
+        const news = await response.json();
+        const newsList = document.getElementById('news-list');
+        newsList.innerHTML = news.map(item => `
+          <div class="news-card">
+            <a href="${item.link}" target="_blank" rel="noopener">
+              <img class="news-img" src="${item.image}" alt="${item.title}">
+            </a>
+            <div class="news-content">
+              <a href="${item.link}" target="_blank" rel="noopener" class="news-title">${item.title}</a>
+              <div class="news-date">${new Date(item.date).toLocaleDateString()}</div>
+              <div class="news-text">${item.summary}</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('news-list').innerHTML = '<p>News konnten nicht geladen werden.<br>Stelle sicher, dass du einen lokalen Server wie Live Server verwendest.</p>';
+      }
+    }
+    // News auch direkt beim Laden anzeigen
+    document.addEventListener('DOMContentLoaded', loadNews);
+  </script>
+  <!-- Kontaktbereich unten rechts -->
+  <div class="contact-icons">
+  <a href="mailto:joshi.stoll@googlemail.com" target="_blank" rel="noopener" title="E-Mail">
+      <svg viewBox="0 0 24 24"><path d="M2 6.5A2.5 2.5 0 0 1 4.5 4h15A2.5 2.5 0 0 1 22 6.5v11A2.5 2.5 0 0 1 19.5 20h-15A2.5 2.5 0 0 1 2 17.5v-11ZM4.5 6a.5.5 0 0 0-.5.5v.2l8 5.3 8-5.3v-.2a.5.5 0 0 0-.5-.5h-15Zm15 2.3-7.6 5.1a1 1 0 0 1-1.1 0L4 8.3V17.5a.5.5 0 0 0 .5.5h15a.5.5 0 0 0 .5-.5V8.3ZM4.5 4h15-15Z"/></svg>
+    </a>
+    <a href="https://www.hs-mainz.de/studium/studiengaenge/technik/geoinformatik-bsc/uebersicht/" target="_blank" rel="noopener" title="Geoinformatik & Vermessung">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 17.93V20h-2v-.07A8.001 8.001 0 0 1 4.07 13H4v-2h.07A8.001 8.001 0 0 1 11 4.07V4h2v.07A8.001 8.001 0 0 1 19.93 11H20v2h-.07A8.001 8.001 0 0 1 13 19.93zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/></svg>
+    </a>
+  <a href="https://www.shop.lvgl.saarland.de" target="_blank" rel="noopener" title="LVGL Onlineshop">
+      <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v9c0 1.1-.9 2-2 2H7zm0-2h10V7H7v9zm5-7c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-4 8h8v-2H8v2z"/></svg>
+    </a>
+  </div>
 </body>
+<script>
+</script>
 </html>
