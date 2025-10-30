@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_14169c562792c3b5d45ea6fdb14ff2ed {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_14169c562792c3b5d45ea6fdb14ff2ed" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_14169c562792c3b5d45ea6fdb14ff2ed = L.map(
+                "map_14169c562792c3b5d45ea6fdb14ff2ed",
+                {
+                    center: [52.518966250000005, 13.39194125],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 7,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3ea5ad2041ef55bec301b9dddff1f920 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_3ea5ad2041ef55bec301b9dddff1f920.addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var tile_layer_895f4ff5cfce52bc18be90fff5ebed6e = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_895f4ff5cfce52bc18be90fff5ebed6e.addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var poly_line_b64feac8cbcbd538e9ecd27cf41b3a79 = L.polyline(
+                [[52.51863, 13.37529], [52.5163, 13.3777], [52.51394, 13.3795], [52.50746, 13.39039], [52.51887, 13.40086], [52.52072, 13.40959], [52.5219, 13.4132], [52.53391, 13.389]],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#3388ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            poly_line_b64feac8cbcbd538e9ecd27cf41b3a79.bindTooltip(
+                `<div>
+                     Reiseroute
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_be68aff8eb13c2d3cdcd1a99190b3562 = L.marker(
+                [52.51863, 13.37529],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_05418526d5182bfe7b79de5cf4fb6794 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e1\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_176ad843cb07719d2f89199d5da4abd0 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_6940dfc77a64c7f0e7161fae595d23c4 = $(`<div id="html_6940dfc77a64c7f0e7161fae595d23c4" style="width: 100.0%; height: 100.0%;"><b>1. Reichstagsgebäude</b><br>Koordinaten: 52.5186, 13.3753</div>`)[0];
+                popup_176ad843cb07719d2f89199d5da4abd0.setContent(html_6940dfc77a64c7f0e7161fae595d23c4);
+            
+        
+
+        marker_be68aff8eb13c2d3cdcd1a99190b3562.bindPopup(popup_176ad843cb07719d2f89199d5da4abd0)
+        ;
+
+        
+    
+    
+            marker_be68aff8eb13c2d3cdcd1a99190b3562.bindTooltip(
+                `<div>
+                     1. Reichstagsgebäude
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_be68aff8eb13c2d3cdcd1a99190b3562.setIcon(div_icon_05418526d5182bfe7b79de5cf4fb6794);
+            
+    
+            var circle_marker_23f60963e9761dcccb81cedcdb67571b = L.circleMarker(
+                [52.51863, 13.37529],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_1b78fb938eb5f4184b77ba080a665d47 = L.marker(
+                [52.5163, 13.3777],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_a49643c3f89db54a77a773f05c7df203 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e2\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_ae0f3cd5925b55f45aba17ed0d97a85b = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d46247088938cbefa7358c65c5be5791 = $(`<div id="html_d46247088938cbefa7358c65c5be5791" style="width: 100.0%; height: 100.0%;"><b>2. Brandenburger Tor</b><br>Koordinaten: 52.5163, 13.3777</div>`)[0];
+                popup_ae0f3cd5925b55f45aba17ed0d97a85b.setContent(html_d46247088938cbefa7358c65c5be5791);
+            
+        
+
+        marker_1b78fb938eb5f4184b77ba080a665d47.bindPopup(popup_ae0f3cd5925b55f45aba17ed0d97a85b)
+        ;
+
+        
+    
+    
+            marker_1b78fb938eb5f4184b77ba080a665d47.bindTooltip(
+                `<div>
+                     2. Brandenburger Tor
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1b78fb938eb5f4184b77ba080a665d47.setIcon(div_icon_a49643c3f89db54a77a773f05c7df203);
+            
+    
+            var circle_marker_dab26cd6f53d18cfbf0bde5655dcd6ef = L.circleMarker(
+                [52.5163, 13.3777],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_7b87a6194f484f7dfe958317c0d378c7 = L.marker(
+                [52.51394, 13.3795],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_b6723072e2847a4e0148cc41594e0eaa = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e3\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_2d770a29b9ccc6305a7006a38986c9b9 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3c3b93d052c82e6566cf3129ba1e95a3 = $(`<div id="html_3c3b93d052c82e6566cf3129ba1e95a3" style="width: 100.0%; height: 100.0%;"><b>3. Holocaust-Mahnmal</b><br>Koordinaten: 52.5139, 13.3795</div>`)[0];
+                popup_2d770a29b9ccc6305a7006a38986c9b9.setContent(html_3c3b93d052c82e6566cf3129ba1e95a3);
+            
+        
+
+        marker_7b87a6194f484f7dfe958317c0d378c7.bindPopup(popup_2d770a29b9ccc6305a7006a38986c9b9)
+        ;
+
+        
+    
+    
+            marker_7b87a6194f484f7dfe958317c0d378c7.bindTooltip(
+                `<div>
+                     3. Holocaust-Mahnmal
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7b87a6194f484f7dfe958317c0d378c7.setIcon(div_icon_b6723072e2847a4e0148cc41594e0eaa);
+            
+    
+            var circle_marker_8fe1ef6aa92a3117b4e9a40c172acf44 = L.circleMarker(
+                [52.51394, 13.3795],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_ba0f5184a8961a259e7c86f1a5515d3d = L.marker(
+                [52.50746, 13.39039],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_71d208be03d0e96ad70876d538b80160 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e4\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_2a8d29f5173ead15b3c892b9a8548463 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_392d823989411b3c1827b530a41a400b = $(`<div id="html_392d823989411b3c1827b530a41a400b" style="width: 100.0%; height: 100.0%;"><b>4. Checkpoint Charlie</b><br>Koordinaten: 52.5075, 13.3904</div>`)[0];
+                popup_2a8d29f5173ead15b3c892b9a8548463.setContent(html_392d823989411b3c1827b530a41a400b);
+            
+        
+
+        marker_ba0f5184a8961a259e7c86f1a5515d3d.bindPopup(popup_2a8d29f5173ead15b3c892b9a8548463)
+        ;
+
+        
+    
+    
+            marker_ba0f5184a8961a259e7c86f1a5515d3d.bindTooltip(
+                `<div>
+                     4. Checkpoint Charlie
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ba0f5184a8961a259e7c86f1a5515d3d.setIcon(div_icon_71d208be03d0e96ad70876d538b80160);
+            
+    
+            var circle_marker_e6a2e7f872044e6171fbf47b15ae83c9 = L.circleMarker(
+                [52.50746, 13.39039],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_d3aa7d86b601982f52207240ecc93c04 = L.marker(
+                [52.51887, 13.40086],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_f95b43ebc0bfbeb95f41b085eb257f91 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e5\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_4bf4e67365c530b6d04fa3cb24ef121d = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_f6fdbdd3977fb731a358d3858c5b8224 = $(`<div id="html_f6fdbdd3977fb731a358d3858c5b8224" style="width: 100.0%; height: 100.0%;"><b>5. Berliner Dom</b><br>Koordinaten: 52.5189, 13.4009</div>`)[0];
+                popup_4bf4e67365c530b6d04fa3cb24ef121d.setContent(html_f6fdbdd3977fb731a358d3858c5b8224);
+            
+        
+
+        marker_d3aa7d86b601982f52207240ecc93c04.bindPopup(popup_4bf4e67365c530b6d04fa3cb24ef121d)
+        ;
+
+        
+    
+    
+            marker_d3aa7d86b601982f52207240ecc93c04.bindTooltip(
+                `<div>
+                     5. Berliner Dom
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d3aa7d86b601982f52207240ecc93c04.setIcon(div_icon_f95b43ebc0bfbeb95f41b085eb257f91);
+            
+    
+            var circle_marker_31939fddf64d621f34095e17dd061b93 = L.circleMarker(
+                [52.51887, 13.40086],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_f756b5992964fcc12e53d0d555b67ef6 = L.marker(
+                [52.52072, 13.40959],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_00e3070006a3535890a4ad7fd0e5d260 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e6\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_ab9594010dbbde6c121c6b7bc9ae6cb0 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_d176fb08d0234db9dc6618075ae8ce78 = $(`<div id="html_d176fb08d0234db9dc6618075ae8ce78" style="width: 100.0%; height: 100.0%;"><b>6. Berliner Fernsehturm</b><br>Koordinaten: 52.5207, 13.4096</div>`)[0];
+                popup_ab9594010dbbde6c121c6b7bc9ae6cb0.setContent(html_d176fb08d0234db9dc6618075ae8ce78);
+            
+        
+
+        marker_f756b5992964fcc12e53d0d555b67ef6.bindPopup(popup_ab9594010dbbde6c121c6b7bc9ae6cb0)
+        ;
+
+        
+    
+    
+            marker_f756b5992964fcc12e53d0d555b67ef6.bindTooltip(
+                `<div>
+                     6. Berliner Fernsehturm
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f756b5992964fcc12e53d0d555b67ef6.setIcon(div_icon_00e3070006a3535890a4ad7fd0e5d260);
+            
+    
+            var circle_marker_19f33121da594a01ce8301301a3b4373 = L.circleMarker(
+                [52.52072, 13.40959],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_950674d1d81875cbd2bdd5142bd1c3fb = L.marker(
+                [52.5219, 13.4132],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_95d026720511ea8c15794cc9333ae006 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e7\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_ade72b2ad9ab7089a7e8834af24400b1 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_a4ee941efceaa474f85e1c455ebccccd = $(`<div id="html_a4ee941efceaa474f85e1c455ebccccd" style="width: 100.0%; height: 100.0%;"><b>7. Alexanderplatz</b><br>Koordinaten: 52.5219, 13.4132</div>`)[0];
+                popup_ade72b2ad9ab7089a7e8834af24400b1.setContent(html_a4ee941efceaa474f85e1c455ebccccd);
+            
+        
+
+        marker_950674d1d81875cbd2bdd5142bd1c3fb.bindPopup(popup_ade72b2ad9ab7089a7e8834af24400b1)
+        ;
+
+        
+    
+    
+            marker_950674d1d81875cbd2bdd5142bd1c3fb.bindTooltip(
+                `<div>
+                     7. Alexanderplatz
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_950674d1d81875cbd2bdd5142bd1c3fb.setIcon(div_icon_95d026720511ea8c15794cc9333ae006);
+            
+    
+            var circle_marker_83d7d8b694af334256a2363569eef781 = L.circleMarker(
+                [52.5219, 13.4132],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var marker_6df8601109e92c8252ed4350adc3a164 = L.marker(
+                [52.53391, 13.389],
+                {
+}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            var div_icon_d611c29a8df7eb9838df8e21d068f3a9 = L.divIcon({
+  "html": "\n            \u003cdiv style=\"\n                display:flex;\n                align-items:center;\n                justify-content:center;\n                width:34px;\n                height:34px;\n                border-radius:50%;\n                background:#2A81CB;\n                color:white;\n                font-weight:bold;\n                border:2px solid white;\n                box-shadow:0 0 3px rgba(0,0,0,0.6);\n            \"\u003e8\u003c/div\u003e\n            ",
+  "iconSize": [34, 34],
+  "iconAnchor": [17, 17],
+  "className": "empty",
+});
+        
+    
+        var popup_1c8b89cb94efbfdb3161f7cc20bbf7ed = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_98a056ada6e99292d08d88b2148bf2e4 = $(`<div id="html_98a056ada6e99292d08d88b2148bf2e4" style="width: 100.0%; height: 100.0%;"><b>8. Gedenkstätte Berliner Mauer Bernauer Straße</b><br>Koordinaten: 52.5339, 13.3890</div>`)[0];
+                popup_1c8b89cb94efbfdb3161f7cc20bbf7ed.setContent(html_98a056ada6e99292d08d88b2148bf2e4);
+            
+        
+
+        marker_6df8601109e92c8252ed4350adc3a164.bindPopup(popup_1c8b89cb94efbfdb3161f7cc20bbf7ed)
+        ;
+
+        
+    
+    
+            marker_6df8601109e92c8252ed4350adc3a164.bindTooltip(
+                `<div>
+                     8. Gedenkstätte Berliner Mauer Bernauer Straße
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6df8601109e92c8252ed4350adc3a164.setIcon(div_icon_d611c29a8df7eb9838df8e21d068f3a9);
+            
+    
+            var circle_marker_1b85b0f8db06ea34c9ef82776fd7ecd4 = L.circleMarker(
+                [52.53391, 13.389],
+                {"bubblingMouseEvents": true, "color": "#3388ff", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#3388ff", "fillOpacity": 0.6, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 6, "stroke": true, "weight": 3}
+            ).addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            tile_layer_3ea5ad2041ef55bec301b9dddff1f920.addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+            tile_layer_895f4ff5cfce52bc18be90fff5ebed6e.addTo(map_14169c562792c3b5d45ea6fdb14ff2ed);
+        
+    
+                marker_be68aff8eb13c2d3cdcd1a99190b3562.setIcon(div_icon_05418526d5182bfe7b79de5cf4fb6794);
+            
+    
+                marker_1b78fb938eb5f4184b77ba080a665d47.setIcon(div_icon_a49643c3f89db54a77a773f05c7df203);
+            
+    
+                marker_7b87a6194f484f7dfe958317c0d378c7.setIcon(div_icon_b6723072e2847a4e0148cc41594e0eaa);
+            
+    
+                marker_ba0f5184a8961a259e7c86f1a5515d3d.setIcon(div_icon_71d208be03d0e96ad70876d538b80160);
+            
+    
+                marker_d3aa7d86b601982f52207240ecc93c04.setIcon(div_icon_f95b43ebc0bfbeb95f41b085eb257f91);
+            
+    
+                marker_f756b5992964fcc12e53d0d555b67ef6.setIcon(div_icon_00e3070006a3535890a4ad7fd0e5d260);
+            
+    
+                marker_950674d1d81875cbd2bdd5142bd1c3fb.setIcon(div_icon_95d026720511ea8c15794cc9333ae006);
+            
+    
+                marker_6df8601109e92c8252ed4350adc3a164.setIcon(div_icon_d611c29a8df7eb9838df8e21d068f3a9);
+            
+</script>
+</html>

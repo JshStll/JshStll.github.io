@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_8c6891ad9dc68ed8ab105cabd2592609 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_8c6891ad9dc68ed8ab105cabd2592609" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_8c6891ad9dc68ed8ab105cabd2592609 = L.map(
+                "map_8c6891ad9dc68ed8ab105cabd2592609",
+                {
+                    center: [40.0, 45.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 3,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_36c6d21a3f37d18d8311ce349ff090cd = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_36c6d21a3f37d18d8311ce349ff090cd.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            var tile_layer_e71f6620427f2294256aa214bd4d8a17 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_e71f6620427f2294256aa214bd4d8a17.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            var marker_04a828db8ce311fea14d546f073616e4 = L.marker(
+                [49.49787, 7.01531],
+                {
+}
+            ).addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            var icon_5b87630ef3062c512cf542eabef59910 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d9dddb55f79083955dfbed385724248b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1dee2b799a3786b2eb70c8fa8faee978 = $(`<div id="html_1dee2b799a3786b2eb70c8fa8faee978" style="width: 100.0%; height: 100.0%;"><b>Zuhause</b><br>Mein Wohnort in Theley (im Saarland).</div>`)[0];
+                popup_d9dddb55f79083955dfbed385724248b.setContent(html_1dee2b799a3786b2eb70c8fa8faee978);
+            
+        
+
+        marker_04a828db8ce311fea14d546f073616e4.bindPopup(popup_d9dddb55f79083955dfbed385724248b)
+        ;
+
+        
+    
+    
+            marker_04a828db8ce311fea14d546f073616e4.bindTooltip(
+                `<div>
+                     Zuhause
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_04a828db8ce311fea14d546f073616e4.setIcon(icon_5b87630ef3062c512cf542eabef59910);
+            
+    
+            var marker_b37526cdade4dbf18449cca3a9838608 = L.marker(
+                [49.98845, 8.22707],
+                {
+}
+            ).addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            var icon_0bc51eba3b6a15fcaf5b831c3b9bfebe = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "school",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a9e05d11c737dab9d2879b38efbeefa2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_701039f013ec7bf35adba9aa1a9641b7 = $(`<div id="html_701039f013ec7bf35adba9aa1a9641b7" style="width: 100.0%; height: 100.0%;"><b>Hochschule Mainz</b><br>Hier studiere ich im 5. Semester Geoinformatik und Vermessung B.Sc..</div>`)[0];
+                popup_a9e05d11c737dab9d2879b38efbeefa2.setContent(html_701039f013ec7bf35adba9aa1a9641b7);
+            
+        
+
+        marker_b37526cdade4dbf18449cca3a9838608.bindPopup(popup_a9e05d11c737dab9d2879b38efbeefa2)
+        ;
+
+        
+    
+    
+            marker_b37526cdade4dbf18449cca3a9838608.bindTooltip(
+                `<div>
+                     Hochschule Mainz Campus
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_b37526cdade4dbf18449cca3a9838608.setIcon(icon_0bc51eba3b6a15fcaf5b831c3b9bfebe);
+            
+    
+            var marker_8ce9079241558e6e64fbe1786e096084 = L.marker(
+                [49.27742, 6.95063],
+                {
+}
+            ).addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            var icon_f753486545d000a22d0ec979dff51866 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "suitcase",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6d2629d0fd59a2b48cdb27714e2912d2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_275bd394b156951cf4a8bc1db6fdd0d1 = $(`<div id="html_275bd394b156951cf4a8bc1db6fdd0d1" style="width: 100.0%; height: 100.0%;"><b>Arbeitsplatz</b><br>Die Zentrale des LVGL in Saarbrücken.</div>`)[0];
+                popup_6d2629d0fd59a2b48cdb27714e2912d2.setContent(html_275bd394b156951cf4a8bc1db6fdd0d1);
+            
+        
+
+        marker_8ce9079241558e6e64fbe1786e096084.bindPopup(popup_6d2629d0fd59a2b48cdb27714e2912d2)
+        ;
+
+        
+    
+    
+            marker_8ce9079241558e6e64fbe1786e096084.bindTooltip(
+                `<div>
+                     Arbeitsplatz- Zentrale Landesamt für Vermessung, Geoinformation und Landentwicklung
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8ce9079241558e6e64fbe1786e096084.setIcon(icon_f753486545d000a22d0ec979dff51866);
+            
+    
+            map_8c6891ad9dc68ed8ab105cabd2592609.fitBounds(
+                [[49.49787, 7.01531], [49.98845, 8.22707], [49.27742, 6.95063]],
+                {"padding": [20, 20]}
+            );
+        
+    
+            var layer_control_202a0088539b936bd00f52bd77b5d269_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_36c6d21a3f37d18d8311ce349ff090cd,
+                    "Carto Light" : tile_layer_e71f6620427f2294256aa214bd4d8a17,
+                },
+                overlays :  {
+                },
+            };
+            let layer_control_202a0088539b936bd00f52bd77b5d269 = L.control.layers(
+                layer_control_202a0088539b936bd00f52bd77b5d269_layers.base_layers,
+                layer_control_202a0088539b936bd00f52bd77b5d269_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": false,
+  "autoZIndex": true,
+}
+            ).addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+
+        
+    
+            tile_layer_36c6d21a3f37d18d8311ce349ff090cd.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            tile_layer_e71f6620427f2294256aa214bd4d8a17.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+                marker_04a828db8ce311fea14d546f073616e4.setIcon(icon_5b87630ef3062c512cf542eabef59910);
+            
+    
+                marker_b37526cdade4dbf18449cca3a9838608.setIcon(icon_0bc51eba3b6a15fcaf5b831c3b9bfebe);
+            
+    
+                marker_8ce9079241558e6e64fbe1786e096084.setIcon(icon_f753486545d000a22d0ec979dff51866);
+            
+    
+            tile_layer_36c6d21a3f37d18d8311ce349ff090cd.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+            tile_layer_e71f6620427f2294256aa214bd4d8a17.addTo(map_8c6891ad9dc68ed8ab105cabd2592609);
+        
+    
+                marker_04a828db8ce311fea14d546f073616e4.setIcon(icon_5b87630ef3062c512cf542eabef59910);
+            
+    
+                marker_b37526cdade4dbf18449cca3a9838608.setIcon(icon_0bc51eba3b6a15fcaf5b831c3b9bfebe);
+            
+    
+                marker_8ce9079241558e6e64fbe1786e096084.setIcon(icon_f753486545d000a22d0ec979dff51866);
+            
+</script>
+</html>

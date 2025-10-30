@@ -145,7 +145,8 @@
     .gallery {
     .map-wrapper {
       width: 100%;
-      max-width: 1100px;
+      /* Match main content width so the map aligns with text below */
+      max-width: 850px;
       margin: 0 auto;
       display: flex;
       justify-content: center;
@@ -374,18 +375,63 @@
     }
 
     .map-wrapper {
-      width: 90vw;
-      max-width: 1100px;
-  margin: 0 auto;
+      width: 100%;
+      /* Align with main content text width */
+      max-width: 850px;
+      margin: 0 auto;
       border-radius: 1.2rem 1.2rem 0 0;
       background: var(--card-bg);
       box-shadow: var(--shadow);
       position: relative;
       padding: 0;
     }
+    /* Eingebettete Projekt-Karten (assets/*.html) */
+    .project-maps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 1100px;
+      margin: 1.2rem auto 0 auto;
+      padding: 0 0.6rem 1rem 0.6rem;
+      box-sizing: border-box;
+    }
+    @media (max-width: 900px) {
+      .project-maps { grid-template-columns: 1fr; }
+    }
+    .project-map-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.9rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+    }
+    .project-map-header {
+      padding: 0.55rem 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+    }
+    .project-map-iframe {
+      width: 100%;
+      border: 0;
+      flex: 1 1 auto;
+      min-height: 220px;
+      display: block;
+    }
+    .project-map-footer {
+      padding: 0.45rem 0.8rem;
+      font-size: 0.95rem;
+      text-align: right;
+      background: transparent;
+    }
+    /* Cesium styles removed (section deleted by user) */
     #map {
-      width: 90vw !important;
-      max-width: 1100px !important;
+      width: 100% !important;
+      max-width: 850px !important;
       height: 400px !important;
       min-height: 400px !important;
       display: block;
@@ -512,7 +558,7 @@
       <div class="modern-tabs">
         <button class="tab-btn active" id="show-about" aria-controls="about-section" aria-selected="true">About</button>
         <button class="tab-btn" id="show-news" aria-controls="news-section" aria-selected="false">News</button>
-        <button class="tab-btn" id="show-projects" aria-controls="projects-section" aria-selected="false">Interaktive Karte</button>
+        <button class="tab-btn" id="show-projects" aria-controls="projects-section" aria-selected="false">Projekte</button>
       </div>
       <div id="about-section" class="tab-content" style="display:block;">
         <section class="about">
@@ -539,6 +585,42 @@
           <div style="text-align:center;margin-top:1.2rem;">
             Die Karte bietet einen praxisnahen Einblick in die Welt der Geoinformatik und Vermessung. Mit modernen Tools lassen sich Entfernungen und Flächen messen, Koordinaten in verschiedenen Bezugssystemen anzeigen und Standorte gezielt analysieren. So werden GIS-Funktionen und geodätische Methoden anschaulich und interaktiv erlebbar – ideal für Studium, Projektarbeit und die digitale Kartierung.
           </div>
+
+          <!-- Eingebettete Karten aus assets/ -->
+          <h3 style="text-align:center;margin-top:1.6rem;margin-bottom:0.6rem;">Weitere Karten</h3>
+          <div class="project-maps">
+            <div class="project-map-card">
+              <div class="project-map-header">Basiskarte</div>
+              <iframe class="project-map-iframe" src="./assets/map_1_basiskarte.html" title="Basiskarte" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/map_1_basiskarte.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+            <div class="project-map-card">
+              <div class="project-map-header">Relevante Orte von Joshua Stoll</div>
+              <iframe class="project-map-iframe" src="./assets/map_2_punkte.html" title="Punkte" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/map_2_punkte.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+            <div class="project-map-card">
+              <div class="project-map-header">Reiseroute in Berlin</div>
+              <iframe class="project-map-iframe" src="./assets/map_3_reiseroute.html" title="Reiseroute" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/map_3_reiseroute.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+            <div class="project-map-card">
+              <div class="project-map-header">Besuchte Länder (grün) von Joshua Stoll</div>
+              <iframe class="project-map-iframe" src="./assets/map_4_flaechen_online.html" title="Flächen online" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/map_4_flaechen_online.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+            <div class="project-map-card">
+              <div class="project-map-header">LoD2 3D‑Gebäude (basemap.de)</div>
+              <iframe class="project-map-iframe" src="./assets/map_5_lod2.html" title="LoD2 3D‑Gebäude" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/map_5_lod2.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+            <div class="project-map-card">
+              <div class="project-map-header">kepler.gl-Karte (Erdbeben der vergangenen 30 Tage, Stand: 30.10.2025, Quelle: earthquake.usgs.gov)</div>
+              <iframe class="project-map-iframe" src="./assets/kepler.gl.html" title="kepler.gl Export" loading="lazy"></iframe>
+              <div class="project-map-footer"><a href="./assets/kepler.gl.html" target="_blank" rel="noopener">In neuem Tab öffnen</a></div>
+            </div>
+          </div>
+          <!-- Cesium LoD2 viewer embedded as separate asset (assets/map_5_lod2.html) -->
         </section>
       </div>
     </section>
@@ -695,6 +777,7 @@
                     </table>
                   </div>`
                 ).openPopup();
+                
                 // Marker löschen per Rechtsklick
                 layer.on('contextmenu', function() {
                   window.drawnItems.removeLayer(layer);
@@ -1055,25 +1138,36 @@
   </div>
 </body>
 <script>
-<!--
-Hinweis für GitHub Pages:
-- Bild und news.json werden mit relativen Pfaden geladen.
-- assets/IMG_3928.jpeg und assets/news.json müssen im Repository liegen.
-- .nojekyll-Datei im Hauptverzeichnis sorgt für korrekte Auslieferung.
--->
+// Hinweis für GitHub Pages:
+// - Bild und news.json werden mit relativen Pfaden geladen.
+// - assets/IMG_3928.jpeg und assets/news.json müssen im Repository liegen.
+// - .nojekyll-Datei im Hauptverzeichnis sorgt für korrekte Auslieferung.
 
 // News aus news.json laden (relativer Pfad für GitHub Pages)
 fetch('./assets/news.json')
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) throw new Error('Network response was not ok');
+    return response.json();
+  })
   .then(data => {
-    // News anzeigen
     const newsList = document.getElementById('news-list');
-    newsList.innerHTML = data.map(
-      item => `<div class="news-item"><strong>${item.title}</strong><br>${item.text}</div>`
-    ).join('');
+    if (!newsList) return;
+    newsList.innerHTML = data.map(item => `
+      <div class="news-card">
+        <a href="${item.link}" target="_blank" rel="noopener">
+          <img class="news-img" src="${item.image}" alt="${item.title}">
+        </a>
+        <div class="news-content">
+          <a href="${item.link}" target="_blank" rel="noopener" class="news-title">${item.title}</a>
+          <div class="news-date">${new Date(item.date).toLocaleDateString()}</div>
+          <div class="news-text">${item.summary || item.text || ''}</div>
+        </div>
+      </div>
+    `).join('');
   })
   .catch(err => {
-    document.getElementById('news-list').innerText = 'News konnten nicht geladen werden.';
+    const nl = document.getElementById('news-list'); if (nl) nl.innerText = 'News konnten nicht geladen werden.';
+    console.error('Error loading news:', err);
   });
 </script>
 </html>

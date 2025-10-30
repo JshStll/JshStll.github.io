@@ -1,0 +1,13 @@
+{
+  "name": "tiles-proxy",
+  "version": "1.0.0",
+  "description": "Simple proxy to test 3D-Tiles with CORS by forwarding requests and rewriting tileset JSON URLs.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.6.7"
+  }
+}
